@@ -1,0 +1,2 @@
+evalscope[opencompass]
+evalscope[vlmeval]
