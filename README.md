@@ -4,7 +4,7 @@
 
 <font size=7><div align='center' >  
 [[📖 Home Page](https://thyme-vl.github.io/)] 
-[[📖 Technique Report](docs/Thyme__Think_Beyond_Images.pdf)] 
+[[📖 Technique Report](https://arxiv.org/abs/2508.11630)] 
 
 [[📊 Thyme SFT Model](https://huggingface.co/Kwai-Keye/Thyme-SFT)] 
 [[📊 Thyme RL Model](https://huggingface.co/Kwai-Keye/Thyme-RL)] 
@@ -328,11 +328,14 @@ print(processed_path)
 If you find Thyme useful in your research or applications, please cite our paper:
 
 ```bibtex
-@article{zhang2025thyme,
-  title={Thyme: Think Beyond Images},
-  author={Kwai Keye},
-  journal={arXiv preprint},
-  year={2025}
+@misc{zhang2025thymethinkimages,
+      title={Thyme: Think Beyond Images}, 
+      author={Yi-Fan Zhang and Xingyu Lu and Shukang Yin and Chaoyou Fu and Wei Chen and Xiao Hu and Bin Wen and Kaiyu Jiang and Changyi Liu and Tianke Zhang and Haonan Fan and Kaibing Chen and Jiankang Chen and Haojie Ding and Kaiyu Tang and Zhang Zhang and Liang Wang and Fan Yang and Tingting Gao and Guorui Zhou},
+      year={2025},
+      eprint={2508.11630},
+      archivePrefix={arXiv},
+      primaryClass={cs.CV},
+      url={https://arxiv.org/abs/2508.11630}, 
 }
 ```
 
