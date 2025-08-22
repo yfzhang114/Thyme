@@ -884,7 +884,7 @@ print(f"Skateboard Cropped Image: {os.path.basename(skateboard_processed_path)}"
         code_step1, 
         "/mllm_hdd/yfzhang/Agent-R1/converted_4dc640d5-6c87-48e8-9bad-9d88261a4853.png", 
         item_id="multi_step_test_s1",
-        temp_output_dir="/mmu_mllm_hdd_2/yifanzhang/agent_latest_code/RL_case_cache_1750427680.6140113/data_0.1.2_visual_toolbox_v2_image_1983_3_rnd0",
+        temp_output_dir="./",
         previous_execution_context=None # No previous context for step 1
     )
     ed_time_s1 = time.time()

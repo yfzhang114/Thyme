@@ -34,7 +34,7 @@ code_fail_indicator = "Code execution failed"
 # @timeout_decorator.timeout(10, use_signals=True)
 async def llm_openai_api(
     messages,
-    ip="10.82.121.22",
+    ip="0.0.0.0",
     host="8080",
     temperature=0.1,
     max_tokens=256,
@@ -273,17 +273,6 @@ def code_check(solution):
         content = box_content.strip()
         if not "sandbox for" in box_content.lower():
             correct_num += 1
-            # box_contents.append(box_content)
-        # if re.match(image_token_pattern, content):
-        #     correct_num += 1
-        # elif re.match(float_pattern, content):
-        #     correct_num += 1
-    if random.random() < 0.05:  # 1%概率
-        with open("/mmu_mllm_hdd_2/yifanzhang/agent_latest_code/examples/train/grpo/plugin/Code_Rewardcode_new_code.jsonl", "a+") as fout:
-            fout.write(json.dumps({"solution": solution})+"\n")
-            # fout.write(json.dumps({"box_contents": box_contents})+"\n")
-            fout.write(json.dumps({"correct_num":correct_num})+"\n")
-            fout.write(json.dumps({"code_num": code_num})+"\n")
     if code_num == 0:
         return False, 0
     return True, correct_num / code_num
@@ -303,12 +292,6 @@ def code_check_llm(solution):
         content = box_content.strip()
         if not "sandbox for" in box_content.lower():
             correct_num += 1
-    if random.random() < 0.05:  # 1%概率
-        with open("/mmu_mllm_hdd_2/yifanzhang/agent_latest_code/examples/train/grpo/plugin/Code_Rewardcode_new_code.jsonl", "a+") as fout:
-            fout.write(json.dumps({"solution": solution})+"\n")
-            # fout.write(json.dumps({"box_contents": box_contents})+"\n")
-            fout.write(json.dumps({"correct_num":correct_num})+"\n")
-            fout.write(json.dumps({"code_num": code_num})+"\n")
     if code_num == 0:
         return False, 0
     return True, correct_num / code_num

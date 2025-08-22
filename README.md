@@ -183,7 +183,7 @@ Each RL data sample follows this structure:
 Example asynchronous function calling the reward model API:
 
 ```python
-async def llm_openai_api(messages, ip="10.82.121.22", host="8080", temperature=0.1, max_tokens=256, top_p=None, n=1):
+async def llm_openai_api(messages, ip="0.0.0.0", host="8080", temperature=0.1, max_tokens=256, top_p=None, n=1):
     openai_api_base = f"http://{ip}:{host}/v1"
     async with httpx.AsyncClient(timeout=httpx.Timeout(600.0)) as client:
         model = "/mllm_hdd/yfzhang/models/Qwen2.5-VL-72B-Instruct-AWQ"
