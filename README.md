@@ -93,6 +93,127 @@ Before training, ensure all referenced images are downloaded and saved locally. 
 ]
 ```
 
+```
+#!/usr/bin/env python3
+import os, json, base64
+from pathlib import Path
+from concurrent.futures import ThreadPoolExecutor, as_completed
+from datasets import load_dataset
+from tqdm import tqdm
+import io
+from PIL import Image
+
+HF_DATA_DIR = "./data/Thyme-SFT"
+ROOT_OUT    = Path("Thyme_sft_data")
+IMG_ROOT    = './data/Thyme_sft_data/img'
+JSONL_ROOT  = ROOT_OUT / "jsonl"
+SPLITS      = ["wo_thinking_thyme_single_round", "2round", "computation"] #,  
+MAX_WORKERS = os.cpu_count()      # Can be adjusted based on machine specs
+
+# IMG_ROOT.mkdir(parents=True, exist_ok=True)
+JSONL_ROOT.mkdir(parents=True, exist_ok=True)
+
+# ----------- Thread pool task -----------
+def save_one_image(args):
+    """
+    Decode Base64 string, handle transparency and save image as JPEG.
+
+    Args:
+        args (tuple): Tuple containing (b64_str, save_path).
+    """
+    b64_str, save_path = args
+    if os.path.exists(save_path):
+        return save_path
+
+    try:
+        # 1. Decode Base64 to get raw binary data
+        image_bytes = base64.b64decode(b64_str)
+
+        # 2. Use Pillow to open image from binary data
+        with Image.open(io.BytesIO(image_bytes)) as img:
+            # 3. Handle transparency (key step)
+            # Check if image mode needs transparency handling.
+            # 'P' mode may contain transparency, 'LA' is grayscale+transparency.
+            # 'RGBA' is the most common mode with transparency.
+            if img.mode in ("RGBA", "LA", "P"):
+                # To uniformly handle all transparency cases, first convert image to RGBA mode.
+                # If image is in 'P' mode with transparency, conversion will result in correct RGBA image.
+                img = img.convert("RGBA")
+
+                # Create a white background base image
+                background = Image.new("RGB", img.size, (255, 255, 255))
+
+                # Paste original image onto the background.
+                # At this point img is already in RGBA mode, so it can serve as its own mask.
+                # Pillow will automatically use its Alpha channel.
+                background.paste(img, (0, 0), img)
+                img = background # Now img is the merged RGB image
+
+            # If image mode is not RGB (e.g., 'L', 'CMYK', etc.), convert to RGB
+            elif img.mode != "RGB":
+                img = img.convert("RGB")
+
+            # 4. Save image in JPEG format
+            # JPEG doesn't support transparency, so background filling is necessary.
+            img.save(save_path, "jpeg", quality=95) # Recommend adding quality parameter
+
+        return str(save_path)
+
+    except Exception as e:
+        # Add exception handling for debugging which image caused the problem
+        print(f"Error processing image for {save_path}: {e}")
+        return None
+
+# ----------- Main processing -----------
+for split in SPLITS:
+    print(f"\n>>> Processing split : {split}  (max_workers={MAX_WORKERS})")
+    # 3. Write jsonl, check if already exists
+    jsonl_path = JSONL_ROOT / f"{split}.jsonl"
+    if not jsonl_path.exists():  # Only write if jsonl file doesn't exist
+        print(f"  JSONL  -> {jsonl_path}")
+    else:
+        print(f"  JSONL already exists: {jsonl_path}")
+
+    ds = load_dataset(HF_DATA_DIR, split=split)
+
+    img_dir = IMG_ROOT + '/' + split
+    # img_dir.mkdir(exist_ok=True)
+
+    # 1. First collect all tasks to be saved
+    tasks = []               # (b64_str, save_path)
+    records = []             # For writing jsonl
+    for sample_idx, sample in enumerate(ds):
+        img_paths = []
+        for img_idx, b64_img in enumerate(sample["image"], start=1):
+            img_name = f"{sample_idx+1:08d}_{img_idx:02d}.jpg"
+            img_path = img_dir + '/' + img_name
+            tasks.append((b64_img, img_path))
+            img_paths.append(str(img_path))
+        records.append({
+            "image": img_paths,
+            "question": sample["question"],
+            "response": sample["response"]
+        })
+
+    # 2. Execute with multi-threading
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as pool:
+        # Only save images that don't already exist
+        saved_images = list(tqdm(pool.map(save_one_image, tasks),
+                                 total=len(tasks), desc="Saving images"))
+    
+    # Filter out items that returned None (i.e., files that already existed)
+    saved_images = [img for img in saved_images if img is not None]
+
+    with open(jsonl_path, "w", encoding="utf-8") as f:
+        for rec in records:
+            f.write(json.dumps(rec, ensure_ascii=False) + "\n")
+    
+    print(f"  Images -> {img_dir}  ({len(saved_images)} files)")
+
+print("\nAll done (multi-threaded)!")
+
+```
+
 ### 2.3 File Path Conversion for System Integration
 
 In every question, there is a specified file path that needs to be converted into the correct system path for use in our platform. The following steps outline the process for handling these paths.
