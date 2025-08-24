@@ -7,7 +7,7 @@
 # CODE_WEIGHT=0.1 \
 # MAX_PIXELS=3211264 \
 deepspeed --hostfile=hostfile_5655_1 \
-    scripts/rl/rlhf_ds.py \
+    scripts/rlhf_ds.py \
     --rlhf_type grpo \
     --model your_sft_model \
     --external_plugins ./examples/train/grpo/plugin/agent_rm.py \
