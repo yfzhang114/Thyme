@@ -13,6 +13,7 @@
 </div></font>
 
 ## 🔥 News
+* **`2025.09.04`** 🌟 Thyme is supported by [VLMEvalKit](https://github.com/open-compass/VLMEvalKit) and [LMMs-Eval](https://github.com/EvolvingLMMs-Lab/lmms-eval). Feel free to use it without hesitation!
 * **`2025.08.18`** 🌟 We are excited to introduce **Thyme: Think Beyond Images**. Thyme transcends traditional ``thinking with images'' paradigms by autonomously generating and executing diverse image processing and computational operations through executable code, significantly enhancing performance on high-resolution perception and complex reasoning tasks. Leveraging a novel two-stage training strategy that combines supervised fine-tuning with reinforcement learning and empowered by the innovative GRPO-ATS algorithm, Thyme achieves a sophisticated balance between reasoning exploration and code execution precision.
 
 <p align="center" width="100%">
