@@ -450,14 +450,11 @@ print(processed_path)
 If you find Thyme useful in your research or applications, please cite our paper:
 
 ```bibtex
-@misc{zhang2025thymethinkimages,
-      title={Thyme: Think Beyond Images}, 
-      author={Yi-Fan Zhang and Xingyu Lu and Shukang Yin and Chaoyou Fu and Wei Chen and Xiao Hu and Bin Wen and Kaiyu Jiang and Changyi Liu and Tianke Zhang and Haonan Fan and Kaibing Chen and Jiankang Chen and Haojie Ding and Kaiyu Tang and Zhang Zhang and Liang Wang and Fan Yang and Tingting Gao and Guorui Zhou},
-      year={2025},
-      eprint={2508.11630},
-      archivePrefix={arXiv},
-      primaryClass={cs.CV},
-      url={https://arxiv.org/abs/2508.11630}, 
+@article{zhang2025thyme,
+  title={Thyme: Think Beyond Images},
+  author={Zhang, Yi-Fan and Lu, Xingyu and Yin, Shukang and Fu, Chaoyou and Chen, Wei and Hu, Xiao and Wen, Bin and Jiang, Kaiyu and Liu, Changyi and Zhang, Tianke and others},
+  journal={arXiv preprint arXiv:2508.11630},
+  year={2025}
 }
 ```
 
